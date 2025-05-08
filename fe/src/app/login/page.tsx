@@ -21,10 +21,8 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      const result = await login(email, password);
-      if (!result.success) {
-        setError(result.error || "Failed to login");
-      }
+      await login(email, password);
+      // If login is successful, the auth hook will redirect to dashboard
     } catch (err: any) {
       setError(err.message || "An unexpected error occurred");
     } finally {
@@ -36,7 +34,7 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center px-4 py-20">
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-black via-indigo-950/10 to-black" />
-        
+
         {/* Animated background elements */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden">
           {Array.from({ length: 20 }).map((_, i) => (
@@ -119,7 +117,7 @@ export default function LoginPage() {
                   variant="futuristic"
                 />
               </div>
-              
+
               {error && (
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
@@ -129,7 +127,7 @@ export default function LoginPage() {
                   {error}
                 </motion.div>
               )}
-              
+
               <Button
                 type="submit"
                 variant="futuristic"
@@ -165,7 +163,7 @@ export default function LoginPage() {
                 )}
               </Button>
             </form>
-            
+
             <div className="mt-6">
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
@@ -175,7 +173,7 @@ export default function LoginPage() {
                   <span className="bg-black px-2 text-gray-400">Or continue with</span>
                 </div>
               </div>
-              
+
               <div className="mt-6 grid grid-cols-2 gap-3">
                 <Button variant="outline" type="button" className="h-12">
                   <svg

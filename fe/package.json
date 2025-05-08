@@ -2,7 +2,7 @@
   "name": "fe",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://yourusername.github.io/sx15_2",
+  "homepage": "https://simulexuser.github.io/sx15_2",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",

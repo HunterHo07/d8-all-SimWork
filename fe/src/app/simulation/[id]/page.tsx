@@ -1,3 +1,8 @@
+// This is required for static site generation with dynamic routes
+export function generateStaticParams() {
+  return [{ id: "demo-scenario" }];
+}
+
 "use client";
 
 import { useState, useEffect, useRef } from "react";
@@ -30,14 +35,14 @@ export default function SimulationPage() {
   useEffect(() => {
     const fetchSimulationData = async () => {
       if (!id) return;
-      
+
       try {
         setIsLoadingData(true);
-        
+
         // Fetch scenario details
         const scenarioData = await scenariosApi.getById(id as string);
         setScenario(scenarioData);
-        
+
         // Fetch tasks for this scenario
         const scenarioTasks = await tasksApi.getByScenario(id as string);
         setTasks(scenarioTasks.sort((a, b) => a.order - b.order));
@@ -67,7 +72,7 @@ export default function SimulationPage() {
     setSimulationStarted(true);
     startTimeRef.current = new Date();
     taskStartTimeRef.current = new Date();
-    
+
     // Start timer
     timerIntervalRef.current = setInterval(() => {
       if (startTimeRef.current) {
@@ -80,13 +85,13 @@ export default function SimulationPage() {
 
   const handleTaskSubmission = async (taskData: any) => {
     if (!user || !scenario || !tasks[currentTaskIndex]) return;
-    
+
     const taskId = tasks[currentTaskIndex].id;
     const now = new Date();
-    const taskTimeSpent = taskStartTimeRef.current 
-      ? calculateTimeDifference(taskStartTimeRef.current, now) 
+    const taskTimeSpent = taskStartTimeRef.current
+      ? calculateTimeDifference(taskStartTimeRef.current, now)
       : 0;
-    
+
     // Create submission data
     const submissionData = {
       user: user.id,
@@ -95,17 +100,17 @@ export default function SimulationPage() {
       time_spent: taskTimeSpent,
       completed: true,
     };
-    
+
     try {
       // Save submission to database
       const submission = await submissionsApi.create(submissionData);
-      
+
       // Update local submissions state
       setSubmissions(prev => ({
         ...prev,
         [taskId]: submission
       }));
-      
+
       // Move to next task or complete simulation
       if (currentTaskIndex < tasks.length - 1) {
         setCurrentTaskIndex(currentTaskIndex + 1);
@@ -121,26 +126,26 @@ export default function SimulationPage() {
 
   const completeSimulation = async () => {
     if (!user || !scenario || !startTimeRef.current) return;
-    
+
     setSimulationCompleted(true);
-    
+
     // Stop timer
     if (timerIntervalRef.current) {
       clearInterval(timerIntervalRef.current);
     }
-    
+
     const now = new Date();
     const totalTimeSpent = calculateTimeDifference(startTimeRef.current, now);
-    
+
     // Calculate metrics and total score
     const taskCompletionData = Object.entries(submissions).map(([taskId, submission]) => ({
       task_id: taskId,
       score: submission.score || 0.8, // Default score if not provided
       time_spent: submission.time_spent
     }));
-    
+
     const totalScore = taskCompletionData.reduce((sum, task) => sum + task.score, 0) / taskCompletionData.length;
-    
+
     // Create analytics data
     const analyticsData = {
       user: user.id,
@@ -159,7 +164,7 @@ export default function SimulationPage() {
       completion_time: totalTimeSpent,
       completed_at: now.toISOString(),
     };
-    
+
     try {
       // Save analytics to database
       await analyticsApi.create(analyticsData);
@@ -254,7 +259,7 @@ export default function SimulationPage() {
                 <div className="mb-8">
                   <h3 className="text-xl font-bold mb-4">Simulation Overview</h3>
                   <p className="text-gray-300 mb-6">{scenario.description}</p>
-                  
+
                   <div className="space-y-4 mb-6">
                     <div className="flex items-center gap-2">
                       <div className="w-6 h-6 rounded-full bg-indigo-500/20 flex items-center justify-center">
@@ -281,14 +286,14 @@ export default function SimulationPage() {
                       </p>
                     </div>
                   </div>
-                  
+
                   <div className="bg-black/50 border border-indigo-500/20 rounded-lg p-4 mb-8">
                     <p className="text-gray-300 text-sm">
                       <span className="font-bold text-indigo-400">Note:</span> Once you start the simulation, you should complete it in one session for the best experience. You can pause if needed, but your timer will continue running.
                     </p>
                   </div>
                 </div>
-                
+
                 <div className="flex justify-center">
                   <Button
                     variant="futuristic"
@@ -332,12 +337,12 @@ export default function SimulationPage() {
                     />
                   </svg>
                 </div>
-                
+
                 <h3 className="text-xl font-bold mb-2">Congratulations!</h3>
                 <p className="text-gray-300 mb-6">
                   You have successfully completed the {scenario.title} simulation.
                 </p>
-                
+
                 <div className="grid grid-cols-2 gap-4 mb-8">
                   <div className="bg-black/50 border border-indigo-500/20 rounded-lg p-4">
                     <p className="text-sm text-gray-400">Total Time</p>
@@ -348,7 +353,7 @@ export default function SimulationPage() {
                     <p className="text-xl font-bold">{tasks.length}</p>
                   </div>
                 </div>
-                
+
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Link href={`/dashboard`}>
                     <Button variant="futuristic" size="lg">
@@ -379,7 +384,7 @@ export default function SimulationPage() {
                 <p className="text-xl font-bold">{formatTime(timeSpent)}</p>
               </div>
             </div>
-            
+
             {/* Task Content */}
             <AnimatePresence mode="wait">
               <motion.div
@@ -395,14 +400,14 @@ export default function SimulationPage() {
                   </CardHeader>
                   <CardContent className="p-6">
                     <p className="text-gray-300 mb-6">{currentTask.description}</p>
-                    
+
                     {/* Task type specific UI would go here */}
                     <div className="bg-black/50 border border-indigo-500/20 rounded-lg p-4 mb-6">
                       <p className="text-gray-300">
                         {currentTask.content.instructions}
                       </p>
                     </div>
-                    
+
                     {/* For demo purposes, we'll just have a simple submission button */}
                     <div className="flex justify-end">
                       <Button
@@ -416,7 +421,7 @@ export default function SimulationPage() {
                 </Card>
               </motion.div>
             </AnimatePresence>
-            
+
             {/* Progress Bar */}
             <div className="mt-8">
               <div className="h-2 bg-gray-800 rounded-full overflow-hidden">

@@ -1,3 +1,8 @@
+// This is required for static site generation with dynamic routes
+export function generateStaticParams() {
+  return [{ id: "demo-scenario" }];
+}
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -23,14 +28,14 @@ export default function ScenarioDetailPage() {
   useEffect(() => {
     const fetchScenarioData = async () => {
       if (!id) return;
-      
+
       try {
         setIsLoadingData(true);
-        
+
         // Fetch scenario details
         const scenarioData = await scenariosApi.getById(id as string);
         setScenario(scenarioData);
-        
+
         // Fetch tasks for this scenario
         const scenarioTasks = await tasksApi.getByScenario(id as string);
         setTasks(scenarioTasks);
@@ -110,7 +115,7 @@ export default function ScenarioDetailPage() {
   }
 
   // Default image if none provided
-  const imageUrl = scenario.cover_image 
+  const imageUrl = scenario.cover_image
     ? `http://127.0.0.1:8090/api/files/scenarios/${scenario.id}/${scenario.cover_image}`
     : `/images/scenario-${scenario.category}.jpg`;
 
@@ -206,7 +211,7 @@ export default function ScenarioDetailPage() {
           transition={{ duration: 0.5, delay: 0.2 }}
         >
           <h2 className="text-2xl font-bold mb-6">Tasks</h2>
-          
+
           {tasks.length > 0 ? (
             <div className="space-y-4">
               {tasks.map((task, index) => (

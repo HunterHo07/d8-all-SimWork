@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Replace with your GitHub username
-GITHUB_USERNAME="your-username"
+GITHUB_USERNAME="simulexuser"
 
 # Add the remote repository
 git remote add origin https://github.com/$GITHUB_USERNAME/sx15_2.git
