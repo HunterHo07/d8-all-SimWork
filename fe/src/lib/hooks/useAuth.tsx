@@ -1,11 +1,8 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import PocketBase from "pocketbase";
 import { useRouter } from "next/navigation";
-
-// Create a PocketBase client
-const pb = new PocketBase(process.env.NEXT_PUBLIC_POCKETBASE_URL || "http://localhost:8091");
+import { authApi } from "@/lib/api/pocketbase";
 
 // Define the auth context type
 interface AuthContextType {
@@ -38,14 +35,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
   useEffect(() => {
     const loadUser = async () => {
       try {
-        // Check if we have a valid auth store
-        if (pb.authStore.isValid) {
-          setUser(pb.authStore.model);
+        // Check if we have a valid auth
+        if (authApi.isAuthenticated()) {
+          setUser(authApi.getCurrentUser());
           setIsAuthenticated(true);
         }
       } catch (err) {
         console.error("Auth error:", err);
-        pb.authStore.clear();
+        authApi.logout();
         setUser(null);
         setIsAuthenticated(false);
       } finally {
@@ -54,12 +51,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
     };
 
     loadUser();
-
-    // Listen for auth state changes
-    pb.authStore.onChange((token, model) => {
-      setIsAuthenticated(!!token);
-      setUser(model);
-    });
   }, []);
 
   // Login function
@@ -67,7 +58,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     setLoading(true);
     setError(null);
     try {
-      const authData = await pb.collection("users").authWithPassword(email, password);
+      const authData = await authApi.login(email, password);
       setUser(authData.record);
       setIsAuthenticated(true);
       router.push("/dashboard");
@@ -85,14 +76,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
     setLoading(true);
     setError(null);
     try {
-      const data = {
-        email,
-        password,
-        passwordConfirm,
-        name,
-      };
-      await pb.collection("users").create(data);
-      await login(email, password);
+      await authApi.register(email, password, passwordConfirm, name);
+      // The mock auth API automatically logs in after registration
+      setUser(authApi.getCurrentUser());
+      setIsAuthenticated(true);
+      router.push("/dashboard");
     } catch (err: any) {
       console.error("Registration error:", err);
       setError(err.message || "Failed to register");
@@ -103,7 +91,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   // Logout function
   const logout = () => {
-    pb.authStore.clear();
+    authApi.logout();
     setUser(null);
     setIsAuthenticated(false);
     router.push("/");

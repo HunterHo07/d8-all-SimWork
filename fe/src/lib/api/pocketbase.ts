@@ -1,9 +1,5 @@
-import PocketBase from 'pocketbase';
-
-// Create a single PocketBase instance for the entire app
-// Use environment variables to determine the API URL
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8091';
-const pb = new PocketBase(API_URL);
+// Import mock API functions instead of using PocketBase
+import { mockAuthApi, mockScenariosApi, mockTasksApi, mockSubmissionsApi, mockAnalyticsApi } from '@/lib/mock/api';
 
 // Types for our collections based on the PocketBase schema
 export interface User {
@@ -114,96 +110,28 @@ export interface Analytics {
   updated: string;
 }
 
-// API functions for authentication
-export const authApi = {
-  register: async (email: string, password: string, passwordConfirm: string, name: string) => {
-    const data = {
-      email,
-      password,
-      passwordConfirm,
-      name,
-    };
-    return await pb.collection('users').create(data);
-  },
+// API functions for authentication - using mock implementation
+export const authApi = mockAuthApi;
 
-  login: async (email: string, password: string) => {
-    return await pb.collection('users').authWithPassword(email, password);
-  },
+// API functions for scenarios - using mock implementation
+export const scenariosApi = mockScenariosApi;
 
-  logout: () => {
-    pb.authStore.clear();
-  },
+// API functions for tasks - using mock implementation
+export const tasksApi = mockTasksApi;
 
-  isAuthenticated: () => {
-    return pb.authStore.isValid;
-  },
+// API functions for submissions - using mock implementation
+export const submissionsApi = mockSubmissionsApi;
 
-  getCurrentUser: () => {
-    return pb.authStore.model;
-  },
+// API functions for analytics - using mock implementation
+export const analyticsApi = mockAnalyticsApi;
+
+// Export a dummy PocketBase instance for compatibility
+const dummyPb = {
+  authStore: {
+    isValid: false,
+    model: null,
+    clear: () => {}
+  }
 };
 
-// API functions for scenarios
-export const scenariosApi = {
-  getAll: async () => {
-    return await pb.collection('scenarios').getFullList<Scenario>();
-  },
-
-  getById: async (id: string) => {
-    return await pb.collection('scenarios').getOne<Scenario>(id);
-  },
-
-  getByCategory: async (category: Scenario['category']) => {
-    return await pb.collection('scenarios').getFullList<Scenario>({
-      filter: `category = "${category}"`,
-    });
-  },
-};
-
-// API functions for tasks
-export const tasksApi = {
-  getByScenario: async (scenarioId: string) => {
-    return await pb.collection('tasks').getFullList<Task>({
-      filter: `scenario = "${scenarioId}"`,
-      sort: 'order',
-    });
-  },
-
-  getById: async (id: string) => {
-    return await pb.collection('tasks').getOne<Task>(id);
-  },
-};
-
-// API functions for submissions
-export const submissionsApi = {
-  create: async (data: Omit<Submission, 'id' | 'created' | 'updated'>) => {
-    return await pb.collection('submissions').create<Submission>(data);
-  },
-
-  update: async (id: string, data: Partial<Omit<Submission, 'id' | 'created' | 'updated'>>) => {
-    return await pb.collection('submissions').update<Submission>(id, data);
-  },
-
-  getByUserAndTask: async (userId: string, taskId: string) => {
-    return await pb.collection('submissions').getFirstListItem<Submission>(`user = "${userId}" && task = "${taskId}"`);
-  },
-};
-
-// API functions for analytics
-export const analyticsApi = {
-  create: async (data: Omit<Analytics, 'id' | 'created' | 'updated'>) => {
-    return await pb.collection('analytics').create<Analytics>(data);
-  },
-
-  getByUserAndScenario: async (userId: string, scenarioId: string) => {
-    return await pb.collection('analytics').getFirstListItem<Analytics>(`user = "${userId}" && scenario = "${scenarioId}"`);
-  },
-
-  getUserAnalytics: async (userId: string) => {
-    return await pb.collection('analytics').getFullList<Analytics>({
-      filter: `user = "${userId}"`,
-    });
-  },
-};
-
-export default pb;
+export default dummyPb;

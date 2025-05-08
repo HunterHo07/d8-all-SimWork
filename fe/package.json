@@ -2,14 +2,15 @@
   "name": "fe",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://simulexuser.github.io/sx15_2",
+  "homepage": "https://hunterho07.github.io/d8-all-SimWork",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "predeploy": "npm run build",
-    "deploy": "touch out/.nojekyll && gh-pages -d out --dotfiles"
+    "ensure-dirs": "node ensure-dirs.js",
+    "predeploy": "npm run ensure-dirs && next build && touch out/.nojekyll",
+    "deploy": "gh-pages -d out --dotfiles"
   },
   "dependencies": {
     "@react-three/drei": "^10.0.7",
