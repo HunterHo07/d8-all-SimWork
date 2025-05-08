@@ -1,0 +1,84 @@
+@import "tailwindcss";
+
+:root {
+  --background: #000000;
+  --foreground: #ffffff;
+
+  --card: rgba(0, 0, 0, 0.8);
+  --card-foreground: #ffffff;
+
+  --primary: #6366f1;
+  --primary-foreground: #ffffff;
+
+  --secondary: #8b5cf6;
+  --secondary-foreground: #ffffff;
+
+  --accent: #ec4899;
+  --accent-foreground: #ffffff;
+
+  --muted: #27272a;
+  --muted-foreground: #a1a1aa;
+
+  --border: rgba(99, 102, 241, 0.2);
+  --input: rgba(99, 102, 241, 0.2);
+
+  --ring: #6366f1;
+
+  --radius: 0.5rem;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+@layer base {
+  * {
+    @apply border-[rgba(99,102,241,0.2)];
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .shadow-glow {
+    box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+  }
+
+  .shadow-glow-lg {
+    box-shadow: 0 0 30px rgba(99, 102, 241, 0.5);
+  }
+
+  .shadow-glow-blue {
+    box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+  }
+
+  .shadow-glow-blue-lg {
+    box-shadow: 0 0 30px rgba(99, 102, 241, 0.5);
+  }
+
+  .shadow-glow-blue-sm {
+    box-shadow: 0 0 10px rgba(99, 102, 241, 0.2);
+  }
+
+  .shadow-glow-red {
+    box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+  }
+
+  .shadow-glow-red-lg {
+    box-shadow: 0 0 30px rgba(239, 68, 68, 0.5);
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500;
+  }
+}
