@@ -20,12 +20,12 @@ export default function RegisterPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    
+
     if (password !== passwordConfirm) {
       setError("Passwords do not match");
       return;
     }
-    
+
     setIsLoading(true);
 
     try {
@@ -44,32 +44,19 @@ export default function RegisterPage() {
     <div className="min-h-screen flex items-center justify-center px-4 py-20">
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-black via-purple-950/10 to-black" />
-        
-        {/* Animated background elements */}
+
+        {/* Static background elements */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden">
           {Array.from({ length: 20 }).map((_, i) => (
-            <motion.div
+            <div
               key={i}
               className="absolute bg-purple-500/10 rounded-full blur-3xl"
-              animate={{
-                x: [
-                  Math.random() * window.innerWidth,
-                  Math.random() * window.innerWidth,
-                ],
-                y: [
-                  Math.random() * window.innerHeight,
-                  Math.random() * window.innerHeight,
-                ],
-              }}
-              transition={{
-                duration: Math.random() * 10 + 20,
-                repeat: Infinity,
-                repeatType: "reverse",
-              }}
               style={{
                 width: `${Math.random() * 400 + 200}px`,
                 height: `${Math.random() * 400 + 200}px`,
                 opacity: Math.random() * 0.3,
+                top: `${Math.random() * 100}%`,
+                left: `${Math.random() * 100}%`,
               }}
             />
           ))}
@@ -105,7 +92,7 @@ export default function RegisterPage() {
                   variant="futuristic"
                 />
               </div>
-              
+
               <div className="space-y-2">
                 <label htmlFor="email" className="text-sm font-medium">
                   Email
@@ -120,7 +107,7 @@ export default function RegisterPage() {
                   variant="futuristic"
                 />
               </div>
-              
+
               <div className="space-y-2">
                 <label htmlFor="password" className="text-sm font-medium">
                   Password
@@ -135,7 +122,7 @@ export default function RegisterPage() {
                   variant="futuristic"
                 />
               </div>
-              
+
               <div className="space-y-2">
                 <label htmlFor="passwordConfirm" className="text-sm font-medium">
                   Confirm Password
@@ -150,7 +137,7 @@ export default function RegisterPage() {
                   variant="futuristic"
                 />
               </div>
-              
+
               {error && (
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
@@ -160,7 +147,7 @@ export default function RegisterPage() {
                   {error}
                 </motion.div>
               )}
-              
+
               <Button
                 type="submit"
                 variant="futuristic"
@@ -196,7 +183,7 @@ export default function RegisterPage() {
                 )}
               </Button>
             </form>
-            
+
             <div className="mt-6">
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
@@ -206,7 +193,7 @@ export default function RegisterPage() {
                   <span className="bg-black px-2 text-gray-400">Or continue with</span>
                 </div>
               </div>
-              
+
               <div className="mt-6 grid grid-cols-2 gap-3">
                 <Button variant="outline" type="button" className="h-12">
                   <svg
