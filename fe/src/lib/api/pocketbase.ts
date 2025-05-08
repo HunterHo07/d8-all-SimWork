@@ -2,7 +2,7 @@ import PocketBase from 'pocketbase';
 
 // Create a single PocketBase instance for the entire app
 // Use environment variables to determine the API URL
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8090';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8091';
 const pb = new PocketBase(API_URL);
 
 // Types for our collections based on the PocketBase schema

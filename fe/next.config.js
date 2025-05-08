@@ -5,10 +5,7 @@ const nextConfig = {
   images: {
     unoptimized: true,  // Required for static export
   },
-  // Disable server-side features when exporting
-  experimental: {
-    appDir: true,
-  },
+  // Next.js 15 already has app directory as default, so we don't need to specify it
 };
 
 module.exports = nextConfig;
