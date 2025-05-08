@@ -2,11 +2,11 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/lib/hooks/useAuth";
 import { Button } from "@/components/ui/button";
+import { Logo } from "@/components/ui/logo";
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -44,14 +44,7 @@ export default function Navbar() {
     >
       <div className="container mx-auto px-4 flex justify-between items-center">
         <Link href="/" className="flex items-center gap-2">
-          <Image
-            src="/images/simulex-logo.svg"
-            alt="SimulEx Logo"
-            width={120}
-            height={36}
-            className="h-9 w-auto"
-            priority
-          />
+          <Logo width={120} height={36} className="h-9 w-auto" />
         </Link>
 
         {/* Desktop Navigation */}
